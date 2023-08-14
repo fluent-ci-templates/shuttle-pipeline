@@ -1,4 +1,4 @@
-import Client from "@dagger.io/dagger";
+import { Client } from "@dagger.io/dagger";
 import { upload } from "https://deno.land/x/codecov_pipeline@v0.1.1/src/dagger/jobs.ts";
 import { withDevbox } from "https://deno.land/x/nix_installer_pipeline@v0.3.6/src/dagger/steps.ts";
 import { existsSync } from "fs";

@@ -16,5 +16,11 @@
       "example/",
       ".fluentci/"
     ]
+  },
+  "test": {
+    "exclude": [
+      "example/",
+      ".fluentci/"
+    ]
   }
 }
