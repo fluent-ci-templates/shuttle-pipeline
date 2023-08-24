@@ -1,4 +1,4 @@
-import Client from "@dagger.io/dagger";
+import { Client } from "@dagger.io/dagger";
 
 export enum Job {
   deploy = "deploy",
@@ -19,7 +19,7 @@ export const deploy = async (client: Client, src = ".") => {
     .withExec(["apt", "install", "-y", "build-essential"])
     .withExec(["cargo", "install", "cargo-shuttle"])
     .withMountedCache(
-      "/root/.cargo/registry",
+      "/usr/local/cargo/registry",
       client.cacheVolume("cargo-registry")
     )
     .withEnvVariable("SHUTTLE_API_KEY", Deno.env.get("SHUTTLE_API_KEY")!)
