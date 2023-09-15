@@ -4,6 +4,8 @@ export enum Job {
   deploy = "deploy",
 }
 
+export const exclude = ["target", ".git", ".fluentci"];
+
 export const deploy = async (client: Client, src = ".") => {
   if (!Deno.env.get("SHUTTLE_API_KEY")) {
     console.log("SHUTTLE_API_KEY is not set");
@@ -24,9 +26,7 @@ export const deploy = async (client: Client, src = ".") => {
     )
     .withEnvVariable("SHUTTLE_API_KEY", Deno.env.get("SHUTTLE_API_KEY")!)
     .withMountedCache("/app/target", client.cacheVolume("cargo-target"))
-    .withDirectory("/app", context, {
-      exclude: ["target", ".git", ".fluentci"],
-    })
+    .withDirectory("/app", context, { exclude })
     .withWorkdir("/app")
     .withExec(["sh", "-c", "cargo shuttle login --api-key $SHUTTLE_API_KEY"])
     .withExec(["cargo", "shuttle", "deploy"]);
