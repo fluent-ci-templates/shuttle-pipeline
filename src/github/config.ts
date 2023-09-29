@@ -34,7 +34,7 @@ export function generateYaml(): Workflow {
       },
       {
         name: "Run Dagger Pipelines",
-        run: "dagger run fluentci shuttle_pipeline",
+        run: "fluentci run shuttle_pipeline",
         env: {
           SHUTTLE_API_KEY: "${{ secrets.SHUTTLE_API_KEY }}",
         },
