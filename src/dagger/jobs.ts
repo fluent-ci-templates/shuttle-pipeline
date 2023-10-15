@@ -12,6 +12,10 @@ export const deploy = async (src = ".", apiKey?: string) => {
     Deno.exit(1);
   }
 
+  if (apiKey) {
+    Deno.env.set("SHUTTLE_API_KEY", apiKey);
+  }
+
   await connect(async (client: Client) => {
     const context = client.host().directory(src);
     const ctr = client
