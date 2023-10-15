@@ -34,7 +34,7 @@ export const deploy = async (src = ".", apiKey?: string) => {
       .withDirectory("/app", context, { exclude })
       .withWorkdir("/app")
       .withExec(["sh", "-c", "cargo shuttle login --api-key $SHUTTLE_API_KEY"])
-      .withExec(["cargo", "shuttle", "restart"])
+      .withExec(["cargo", "shuttle", "project", "restart"])
       .withExec(["cargo", "shuttle", "deploy"]);
 
     const result = await ctr.stdout();
