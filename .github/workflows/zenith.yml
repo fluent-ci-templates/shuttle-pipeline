@@ -19,7 +19,6 @@ jobs:
       - name: Setup Shuttle API Key
         run: |
           sed -i "s/SHUTTLE_API_KEY/$SHUTTLE_API_KEY/g" example/deploy.gql
-        working-directory: example
         env:
           SHUTTLE_API_KEY: ${{ secrets.SHUTTLE_API_KEY }}
       - name: Run Dagger Pipelines
