@@ -1,4 +1,4 @@
-import Client from "../../deps.ts";
+import Client, { connect } from "../../deps.ts";
 
 export enum Job {
   deploy = "deploy",
@@ -6,48 +6,51 @@ export enum Job {
 
 export const exclude = ["target", ".git", ".fluentci"];
 
-export const deploy = async (client: Client, src = ".") => {
-  if (!Deno.env.get("SHUTTLE_API_KEY")) {
+export const deploy = async (src = ".", apiKey?: string) => {
+  if (!Deno.env.get("SHUTTLE_API_KEY") && !apiKey) {
     console.log("SHUTTLE_API_KEY is not set");
     Deno.exit(1);
   }
 
-  const context = client.host().directory(src);
-  const ctr = client
-    .pipeline(Job.deploy)
-    .container()
-    .from("rust:1.71-bookworm")
-    .withExec(["apt", "update"])
-    .withExec(["apt", "install", "-y", "build-essential"])
-    .withExec(["cargo", "install", "cargo-shuttle"])
-    .withMountedCache(
-      "/usr/local/cargo/registry",
-      client.cacheVolume("cargo-registry")
-    )
-    .withEnvVariable("SHUTTLE_API_KEY", Deno.env.get("SHUTTLE_API_KEY")!)
-    .withMountedCache("/app/target", client.cacheVolume("cargo-target"))
-    .withDirectory("/app", context, { exclude })
-    .withWorkdir("/app")
-    .withExec(["sh", "-c", "cargo shuttle login --api-key $SHUTTLE_API_KEY"])
-    .withExec(["cargo", "shuttle", "deploy"]);
+  await connect(async (client: Client) => {
+    const context = client.host().directory(src);
+    const ctr = client
+      .pipeline(Job.deploy)
+      .container()
+      .from("rust:1.71-bookworm")
+      .withExec(["apt", "update"])
+      .withExec(["apt", "install", "-y", "build-essential"])
+      .withExec(["cargo", "install", "cargo-shuttle"])
+      .withMountedCache(
+        "/usr/local/cargo/registry",
+        client.cacheVolume("cargo-registry")
+      )
+      .withEnvVariable("SHUTTLE_API_KEY", Deno.env.get("SHUTTLE_API_KEY")!)
+      .withMountedCache("/app/target", client.cacheVolume("cargo-target"))
+      .withDirectory("/app", context, { exclude })
+      .withWorkdir("/app")
+      .withExec(["sh", "-c", "cargo shuttle login --api-key $SHUTTLE_API_KEY"])
+      .withExec(["cargo", "shuttle", "deploy"]);
 
-  const result = await ctr.stdout();
+    const result = await ctr.stdout();
 
-  console.log(result);
+    console.log(result);
+  });
+
+  return "done";
 };
 
 export type JobExec = (
-  client: Client,
-  src?: string
+  src?: string,
+  apiKey?: string
 ) =>
-  | Promise<void>
+  | Promise<string>
   | ((
-      client: Client,
       src?: string,
       options?: {
         ignore: string[];
       }
-    ) => Promise<void>);
+    ) => Promise<string>);
 
 export const runnableJobs: Record<Job, JobExec> = {
   [Job.deploy]: deploy,
