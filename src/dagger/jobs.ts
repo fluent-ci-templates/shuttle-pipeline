@@ -21,14 +21,14 @@ export const deploy = async (src = ".", apiKey?: string) => {
     const ctr = client
       .pipeline(Job.deploy)
       .container()
-      .from("rust:1.71-bookworm")
+      .from("rust:1.72-bookworm")
       .withExec(["apt", "update"])
       .withExec(["apt", "install", "-y", "build-essential"])
-      .withExec(["cargo", "install", "cargo-shuttle"])
       .withMountedCache(
         "/usr/local/cargo/registry",
         client.cacheVolume("cargo-registry")
       )
+      .withExec(["cargo", "install", "cargo-shuttle"])
       .withEnvVariable("SHUTTLE_API_KEY", Deno.env.get("SHUTTLE_API_KEY")!)
       .withMountedCache("/app/target", client.cacheVolume("cargo-target"))
       .withDirectory("/app", context, { exclude })
