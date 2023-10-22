@@ -27,6 +27,10 @@ fluentci run shuttle_pipeline
 |---------|---------------------------------------------|
 | deploy  | Deploy your Rust application to shuttle.rs. |
 
+```graphql
+deploy(apiKey: String!, src: String!): String
+```
+
 ## Programmatic usage
 
 You can also use this pipeline programmatically:
