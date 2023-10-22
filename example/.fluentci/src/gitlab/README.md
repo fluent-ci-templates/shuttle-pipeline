@@ -40,7 +40,7 @@ Generated file:
 deploy:
   extends: .dagger
   script:
-    - dagger run fluentci shuttle_pipeline
+    - fluentci run shuttle_pipeline
 
 
 ```

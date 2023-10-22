@@ -12,7 +12,7 @@ A ready-to-use CI/CD Pipeline for deploying your Rust applications to [Shuttle](
 Run the following command:
 
 ```bash
-dagger run fluentci shuttle_pipeline
+fluentci run shuttle_pipeline
 ```
 
 ## Environment Variables
@@ -32,8 +32,8 @@ dagger run fluentci shuttle_pipeline
 You can also use this pipeline programmatically:
 
 ```typescript
-import Client, { connect } from "https://sdk.fluentci.io/v0.1.7/mod.ts";
-import { deploy } from "https://pkg.fluentci.io/shuttle_pipeline@v0.5.0/mod.ts";
+import Client, { connect } from "https://sdk.fluentci.io/v0.1.9/mod.ts";
+import { deploy } from "https://pkg.fluentci.io/shuttle_pipeline@v0.5.2/mod.ts";
 
 function pipeline(src = ".") {
   connect(async (client: Client) => {

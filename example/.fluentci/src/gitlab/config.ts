@@ -25,7 +25,7 @@ export function generateYaml(): GitlabCI {
 
   const deploy = new Job()
     .extends(".dagger")
-    .script("dagger run fluentci shuttle_pipeline");
+    .script("fluentci run shuttle_pipeline");
 
   return new GitlabCI()
     .addJob(".docker", docker)

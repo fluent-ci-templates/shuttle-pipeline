@@ -1,0 +1,5 @@
+{
+  shuttle {
+    deploy(src: ".", apiKey: "SHUTTLE_API_KEY")
+  }
+}

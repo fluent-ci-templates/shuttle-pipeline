@@ -43,7 +43,7 @@ jobs:
             sudo mv bin/dagger /usr/local/bin
             dagger version
       - name: Run Dagger Pipelines
-        run: dagger run fluentci shuttle_pipeline
+        run: fluentci run shuttle_pipeline
         env:
           SHUTTLE_API_KEY: ${{ secrets.SHUTTLE_API_KEY }}
 

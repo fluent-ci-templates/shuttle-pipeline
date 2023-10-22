@@ -27,20 +27,16 @@ fluentci run shuttle_pipeline
 |---------|---------------------------------------------|
 | deploy  | Deploy your Rust application to shuttle.rs. |
 
+```graphql
+deploy(apiKey: String!, src: String!): String
+```
+
 ## Programmatic usage
 
 You can also use this pipeline programmatically:
 
 ```typescript
-import Client, { connect } from "https://sdk.fluentci.io/v0.1.9/mod.ts";
-import { deploy } from "https://pkg.fluentci.io/shuttle_pipeline@v0.5.2/mod.ts";
+import { deploy } from "https://pkg.fluentci.io/shuttle_pipeline@v0.6.0/mod.ts";
 
-function pipeline(src = ".") {
-  connect(async (client: Client) => {
-    await deploy(client, src);
-  });
-}
-
-pipeline();
-
+await deploy(".");
 ```
