@@ -1,4 +1,6 @@
-import Client, { connect } from "../../deps.ts";
+import Client, { Directory } from "../../deps.ts";
+import { connect } from "../../sdk/connect.ts";
+import { getDirectory } from "./lib.ts";
 
 export enum Job {
   deploy = "deploy",
@@ -6,7 +8,10 @@ export enum Job {
 
 export const exclude = ["target", ".git", ".fluentci"];
 
-export const deploy = async (src = ".", apiKey?: string) => {
+export const deploy = async (
+  src: string | Directory | undefined = ".",
+  apiKey?: string
+) => {
   if (!Deno.env.get("SHUTTLE_API_KEY") && !apiKey) {
     console.log("SHUTTLE_API_KEY is not set");
     Deno.exit(1);
@@ -17,7 +22,7 @@ export const deploy = async (src = ".", apiKey?: string) => {
   }
 
   await connect(async (client: Client) => {
-    const context = client.host().directory(src);
+    const context = getDirectory(client, src);
     const ctr = client
       .pipeline(Job.deploy)
       .container()
