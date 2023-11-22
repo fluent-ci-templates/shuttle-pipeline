@@ -1,6 +1,6 @@
-import Client, { Directory } from "../../deps.ts";
+import Client, { Directory, Secret } from "../../deps.ts";
 import { connect } from "../../sdk/connect.ts";
-import { getDirectory } from "./lib.ts";
+import { getDirectory, getApiKey } from "./lib.ts";
 
 export enum Job {
   deploy = "deploy",
@@ -10,19 +10,17 @@ export const exclude = ["target", ".git", ".fluentci"];
 
 export const deploy = async (
   src: string | Directory | undefined = ".",
-  apiKey?: string
+  apiKey?: string | Secret
 ) => {
-  if (!Deno.env.get("SHUTTLE_API_KEY") && !apiKey) {
-    console.log("SHUTTLE_API_KEY is not set");
-    Deno.exit(1);
-  }
-
-  if (apiKey) {
-    Deno.env.set("SHUTTLE_API_KEY", apiKey);
-  }
-
   await connect(async (client: Client) => {
     const context = getDirectory(client, src);
+    const secret = getApiKey(client, apiKey);
+
+    if (!secret) {
+      console.error("Missing SHUTTLE_API_KEY");
+      Deno.exit(1);
+    }
+
     const ctr = client
       .pipeline(Job.deploy)
       .container()
@@ -34,7 +32,7 @@ export const deploy = async (
         client.cacheVolume("cargo-registry")
       )
       .withExec(["cargo", "install", "cargo-shuttle"])
-      .withEnvVariable("SHUTTLE_API_KEY", Deno.env.get("SHUTTLE_API_KEY")!)
+      .withSecretVariable("SHUTTLE_API_KEY", secret)
       .withMountedCache("/app/target", client.cacheVolume("cargo-target"))
       .withDirectory("/app", context, { exclude })
       .withWorkdir("/app")

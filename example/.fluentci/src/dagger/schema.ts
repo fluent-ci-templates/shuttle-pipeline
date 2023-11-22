@@ -32,6 +32,7 @@ const schema = makeSchema({
 
 schema.description = JSON.stringify({
   "deploy.src": "directory",
+  "deploy.apiKey": "secret",
 });
 
 export { schema };
