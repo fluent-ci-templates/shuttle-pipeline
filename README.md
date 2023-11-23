@@ -15,6 +15,13 @@ Run the following command:
 fluentci run shuttle_pipeline
 ```
 
+## Dagger Module
+
+Use as a [Dagger](https://dagger.io) Module:
+```bash
+dagger mod install github.com/fluent-ci-templates/shuttle-pipeline@mod
+```
+
 ## Environment Variables
 
 | Variable        | Description                      |
