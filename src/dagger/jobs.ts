@@ -8,10 +8,17 @@ export enum Job {
 
 export const exclude = ["target", ".git", ".fluentci"];
 
-export const deploy = async (
+/**
+ * @function
+ * @description Deploy the application to Shuttle
+ * @param src {string | Directory | undefined}
+ * @param apiKey {string | Secret}
+ * @returns {string}
+ */
+export async function deploy(
   src: string | Directory | undefined = ".",
   apiKey?: string | Secret
-) => {
+): Promise<string> {
   await connect(async (client: Client) => {
     const context = getDirectory(client, src);
     const secret = getApiKey(client, apiKey);
@@ -45,19 +52,9 @@ export const deploy = async (
   });
 
   return "done";
-};
+}
 
-export type JobExec = (
-  src?: string,
-  apiKey?: string
-) =>
-  | Promise<string>
-  | ((
-      src?: string,
-      options?: {
-        ignore: string[];
-      }
-    ) => Promise<string>);
+export type JobExec = (src?: string, apiKey?: string) => Promise<string>;
 
 export const runnableJobs: Record<Job, JobExec> = {
   [Job.deploy]: deploy,
