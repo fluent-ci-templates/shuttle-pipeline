@@ -11,8 +11,8 @@ export const exclude = ["target", ".git", ".fluentci"];
 /**
  * @function
  * @description Deploy the application to Shuttle
- * @param src {string | Directory | undefined}
- * @param apiKey {string | Secret}
+ * @param {string | Directory | undefined} src
+ * @param {string | Secret} apiKey
  * @returns {string}
  */
 export async function deploy(
