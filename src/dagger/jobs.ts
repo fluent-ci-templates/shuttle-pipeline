@@ -19,6 +19,7 @@ export async function deploy(
   src: string | Directory | undefined = ".",
   apiKey?: string | Secret
 ): Promise<string> {
+  let result = "";
   await connect(async (client: Client) => {
     const context = getDirectory(client, src);
     const secret = getApiKey(client, apiKey);
@@ -46,12 +47,10 @@ export async function deploy(
       .withExec(["sh", "-c", "cargo shuttle login --api-key $SHUTTLE_API_KEY"])
       .withExec(["cargo", "shuttle", "deploy"]);
 
-    const result = await ctr.stdout();
-
-    console.log(result);
+    result = await ctr.stdout();
   });
 
-  return "done";
+  return result;
 }
 
 export type JobExec = (src?: string, apiKey?: string) => Promise<string>;

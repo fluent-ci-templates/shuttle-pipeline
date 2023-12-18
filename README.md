@@ -34,8 +34,11 @@ dagger mod install github.com/fluent-ci-templates/shuttle-pipeline@mod
 |---------|---------------------------------------------|
 | deploy  | Deploy your Rust application to shuttle.rs. |
 
-```graphql
-deploy(apiKey: String!, src: String!): String
+```typescript
+ deploy(
+  src: string | Directory | undefined = ".",
+  apiKey?: string | Secret
+): Promise<string>
 ```
 
 ## Programmatic usage
