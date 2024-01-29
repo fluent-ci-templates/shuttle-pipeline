@@ -16,7 +16,8 @@ export const exclude = ["target", ".git", ".fluentci"];
  */
 export async function deploy(
   src: string | Directory | undefined = ".",
-  apiKey?: string | Secret
+  apiKey?: string | Secret,
+  shuttleVersion?: string
 ): Promise<string> {
   const context = await getDirectory(dag, src);
   const secret = await getApiKey(dag, apiKey);
@@ -26,17 +27,33 @@ export async function deploy(
     Deno.exit(1);
   }
 
+  const VERSION =
+    shuttleVersion || Deno.env.get("SHUTTLE_VERSION") || "v0.37.0";
+
   const ctr = dag
     .pipeline(Job.deploy)
     .container()
-    .from("rust:1.72-bookworm")
+    .from("rust:1.75-bookworm")
     .withExec(["apt", "update"])
     .withExec(["apt", "install", "-y", "build-essential"])
     .withMountedCache(
       "/usr/local/cargo/registry",
       dag.cacheVolume("cargo-registry")
     )
-    .withExec(["cargo", "install", "cargo-shuttle"])
+    .withExec([
+      "wget",
+      `https://github.com/shuttle-hq/shuttle/releases/download/${VERSION}/cargo-shuttle-${VERSION}-x86_64-unknown-linux-gnu.tar.gz`,
+    ])
+    .withExec([
+      "tar",
+      "xvf",
+      `cargo-shuttle-${VERSION}-x86_64-unknown-linux-gnu.tar.gz`,
+    ])
+    .withExec([
+      "mv",
+      `cargo-shuttle-x86_64-unknown-linux-gnu-${VERSION}/cargo-shuttle`,
+      "/usr/local/cargo/bin",
+    ])
     .withSecretVariable("SHUTTLE_API_KEY", secret)
     .withMountedCache("/app/target", dag.cacheVolume("cargo-target"))
     .withDirectory("/app", context, { exclude })
@@ -49,7 +66,11 @@ export async function deploy(
   return result;
 }
 
-export type JobExec = (src?: string, apiKey?: string) => Promise<string>;
+export type JobExec = (
+  src?: string,
+  apiKey?: string,
+  shuttleVersion?: string
+) => Promise<string>;
 
 export const runnableJobs: Record<Job, JobExec> = {
   [Job.deploy]: deploy,
