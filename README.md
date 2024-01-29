@@ -27,7 +27,7 @@ dagger mod install github.com/fluent-ci-templates/shuttle-pipeline@mod
 | Variable        | Description                      |
 |-----------------|----------------------------------|
 | SHUTTLE_API_KEY | Your Shuttle API key             |
-| SHUTTLE_VERSION | The version of Shuttle to deploy, defaults to `v0.37` |
+| SHUTTLE_VERSION | The version of `cargo shuttle`, defaults to `v0.37` |
 
 ## Jobs
 
