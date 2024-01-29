@@ -37,7 +37,8 @@ dagger mod install github.com/fluent-ci-templates/shuttle-pipeline@mod
 ```typescript
  deploy(
   src: string | Directory | undefined = ".",
-  apiKey?: string | Secret
+  apiKey?: string | Secret,
+  shuttleVersion?: string,
 ): Promise<string>
 ```
 
@@ -46,7 +47,7 @@ dagger mod install github.com/fluent-ci-templates/shuttle-pipeline@mod
 You can also use this pipeline programmatically:
 
 ```typescript
-import { deploy } from "https://pkg.fluentci.io/shuttle_pipeline@v0.7.1/mod.ts";
+import { deploy } from "https://pkg.fluentci.io/shuttle_pipeline@v0.7.2/mod.ts";
 
 await deploy(".");
 ```
