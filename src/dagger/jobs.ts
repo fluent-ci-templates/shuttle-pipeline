@@ -17,7 +17,7 @@ export const exclude = ["target", ".git", ".fluentci"];
 export async function deploy(
   src: string | Directory | undefined = ".",
   apiKey?: string | Secret,
-  shuttleVersion?: string
+  shuttleVersion = "v0.37.0"
 ): Promise<string> {
   const context = await getDirectory(dag, src);
   const secret = await getApiKey(dag, apiKey);
@@ -27,8 +27,7 @@ export async function deploy(
     Deno.exit(1);
   }
 
-  const VERSION =
-    shuttleVersion || Deno.env.get("SHUTTLE_VERSION") || "v0.37.0";
+  const VERSION = shuttleVersion || Deno.env.get("SHUTTLE_VERSION");
 
   const ctr = dag
     .pipeline(Job.deploy)
