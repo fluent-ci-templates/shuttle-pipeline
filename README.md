@@ -34,7 +34,7 @@ dagger call deploy --src . --api-key SHUTTLE_API_KEY
 | Variable        | Description                      |
 |-----------------|----------------------------------|
 | SHUTTLE_API_KEY | Your Shuttle API key             |
-| SHUTTLE_VERSION | The version of `cargo shuttle`, defaults to `v0.37` |
+| SHUTTLE_VERSION | The version of `cargo shuttle`, defaults to `v0.39.0` |
 
 ## Jobs
 

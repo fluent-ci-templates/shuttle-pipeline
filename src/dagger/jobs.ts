@@ -22,7 +22,7 @@ export const exclude = ["target", ".git", ".fluentci"];
 export async function deploy(
   src: string | Directory | undefined = ".",
   apiKey?: string | Secret,
-  shuttleVersion = "v0.37.0"
+  shuttleVersion = "v0.39.0"
 ): Promise<string> {
   const context = await getDirectory(dag, src);
   const secret = await getApiKey(dag, apiKey);
