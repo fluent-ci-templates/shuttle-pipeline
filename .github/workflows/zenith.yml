@@ -23,7 +23,7 @@ jobs:
           SHUTTLE_API_KEY: ${{ secrets.SHUTTLE_API_KEY }}
       - name: Run Dagger Pipelines
         run: |
-          dagger call deploy --src . --api-key SHUTTLE_API_KEY
+          dagger call deploy --src . --api-key SHUTTLE_API_KEY --shuttle-version v0.39.0
         working-directory: example
         env:
           SHUTTLE_API_KEY: ${{ secrets.SHUTTLE_API_KEY }}
