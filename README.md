@@ -5,10 +5,6 @@
 ![deno compatibility](https://shield.deno.dev/deno/^1.37)
 [![](https://img.shields.io/codecov/c/gh/fluent-ci-templates/shuttle-pipeline)](https://codecov.io/gh/fluent-ci-templates/shuttle-pipeline)
 
-
-[![CodeSee](https://codesee-docs.s3.amazonaws.com/badge.svg?)](https://app.codesee.io/maps/public/6a84a080-c689-11ee-b3d5-db051da2172a)
-
-
 A ready-to-use CI/CD Pipeline for deploying your Rust applications to [Shuttle](https://shuttle.rs/).
 
 ## 🚀 Usage
@@ -22,8 +18,15 @@ fluentci run shuttle_pipeline
 ## Dagger Module
 
 Use as a [Dagger](https://dagger.io) Module:
+
 ```bash
-dagger mod install github.com/fluent-ci-templates/shuttle-pipeline@mod
+dagger install github.com/fluent-ci-templates/shuttle-pipeline@main
+```
+
+Call `deploy` function from this module:
+
+```bash
+dagger call deploy --src . --api-key SHUTTLE_API_KEY
 ```
 
 ## Environment Variables
@@ -52,7 +55,7 @@ dagger mod install github.com/fluent-ci-templates/shuttle-pipeline@mod
 You can also use this pipeline programmatically:
 
 ```typescript
-import { deploy } from "https://pkg.fluentci.io/shuttle_pipeline@v0.7.3/mod.ts";
+import { deploy } from "https://pkg.fluentci.io/shuttle_pipeline@v0.7.4/mod.ts";
 
 await deploy(".");
 ```

@@ -1,3 +1,8 @@
+/**
+ * @module shuttle
+ * @description Deploy Rust applications to Shuttle
+ */
+
 import { Directory, Secret, dag } from "../../deps.ts";
 import { getDirectory, getApiKey } from "./lib.ts";
 
