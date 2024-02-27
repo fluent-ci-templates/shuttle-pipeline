@@ -55,7 +55,7 @@ dagger call deploy --src . --api-key SHUTTLE_API_KEY
 You can also use this pipeline programmatically:
 
 ```typescript
-import { deploy } from "https://pkg.fluentci.io/shuttle_pipeline@v0.7.4/mod.ts";
+import { deploy } from "https://pkg.fluentci.io/shuttle_pipeline@v0.7.5/mod.ts";
 
 await deploy(".");
 ```
