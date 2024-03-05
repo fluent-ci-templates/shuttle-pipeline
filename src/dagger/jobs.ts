@@ -3,7 +3,7 @@
  * @description Deploy Rust applications to Shuttle
  */
 
-import { Directory, Secret, dag } from "../../deps.ts";
+import { Directory, Secret, dag, env, exit } from "../../deps.ts";
 import { getDirectory, getApiKey } from "./lib.ts";
 
 export enum Job {
@@ -13,8 +13,10 @@ export enum Job {
 export const exclude = ["target", ".git", ".fluentci"];
 
 /**
+ * Deploy to Shuttle
+ *
  * @function
- * @description Deploy the application to Shuttle
+ * @description Deploy to Shuttle
  * @param {string | Directory | undefined} src
  * @param {string | Secret} apiKey
  * @returns {string}
@@ -24,20 +26,21 @@ export async function deploy(
   apiKey?: string | Secret,
   shuttleVersion = "v0.39.0"
 ): Promise<string> {
-  const context = await getDirectory(dag, src);
-  const secret = await getApiKey(dag, apiKey);
+  const context = await getDirectory(src);
+  const secret = await getApiKey(apiKey);
 
   if (!secret) {
     console.error("Missing SHUTTLE_API_KEY");
-    Deno.exit(1);
+    exit(1);
+    return "";
   }
 
-  const VERSION = shuttleVersion || Deno.env.get("SHUTTLE_VERSION");
+  const VERSION = shuttleVersion || env.get("SHUTTLE_VERSION");
 
   const ctr = dag
     .pipeline(Job.deploy)
     .container()
-    .from("rust:1.75-bookworm")
+    .from("rust:1.76-bookworm")
     .withExec(["apt", "update"])
     .withExec(["apt", "install", "-y", "build-essential"])
     .withMountedCache(
@@ -65,9 +68,7 @@ export async function deploy(
     .withExec(["sh", "-c", "cargo shuttle login --api-key $SHUTTLE_API_KEY"])
     .withExec(["cargo", "shuttle", "deploy"]);
 
-  const result = await ctr.stdout();
-
-  return result;
+  return ctr.stdout();
 }
 
 export type JobExec = (

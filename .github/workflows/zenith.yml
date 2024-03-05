@@ -16,11 +16,6 @@ jobs:
           curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.10.0 sh
           sudo mv bin/dagger /usr/local/bin
           dagger version
-      - name: Setup Shuttle API Key
-        run: |
-          sed -i "s/SHUTTLE_API_KEY/$SHUTTLE_API_KEY/g" example/deploy.gql
-        env:
-          SHUTTLE_API_KEY: ${{ secrets.SHUTTLE_API_KEY }}
       - name: Run Dagger Pipelines
         run: |
           dagger call deploy --src . --api-key SHUTTLE_API_KEY --shuttle-version v0.39.0

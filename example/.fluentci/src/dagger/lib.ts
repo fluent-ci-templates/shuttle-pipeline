@@ -1,36 +1,45 @@
-import { Directory, DirectoryID, Secret, SecretID } from "../../deps.ts";
-import { Client } from "../../sdk/client.gen.ts";
+import {
+  dag,
+  env,
+  Directory,
+  DirectoryID,
+  Secret,
+  SecretID,
+} from "../../deps.ts";
 
 export const getDirectory = async (
-  client: Client,
   src: string | Directory | undefined = "."
 ) => {
+  if (src instanceof Directory) {
+    return src;
+  }
   if (typeof src === "string") {
     try {
-      const directory = client.loadDirectoryFromID(src as DirectoryID);
+      const directory = dag.loadDirectoryFromID(src as DirectoryID);
       await directory.id();
       return directory;
     } catch (_) {
-      return client.host().directory(src);
+      return dag.host
+        ? dag.host().directory(src)
+        : dag.currentModule().source().directory(src);
     }
   }
-  return src instanceof Directory ? src : client.host().directory(src);
+  return dag.host
+    ? dag.host().directory(src)
+    : dag.currentModule().source().directory(src);
 };
 
-export const getApiKey = async (client: Client, apiKey?: string | Secret) => {
-  if (Deno.env.get("SHUTTLE_API_KEY")) {
-    return client.setSecret(
-      "SHUTTLE_API_KEY",
-      Deno.env.get("SHUTTLE_API_KEY")!
-    );
+export const getApiKey = async (apiKey?: string | Secret) => {
+  if (env.get("SHUTTLE_API_KEY")) {
+    return dag.setSecret("SHUTTLE_API_KEY", env.get("SHUTTLE_API_KEY")!);
   }
   if (apiKey && typeof apiKey === "string") {
     try {
-      const secret = client.loadSecretFromID(apiKey as SecretID);
+      const secret = dag.loadSecretFromID(apiKey as SecretID);
       await secret.id();
       return secret;
     } catch (_) {
-      return client.setSecret("SHUTTLE_API_KEY", apiKey);
+      return dag.setSecret("SHUTTLE_API_KEY", apiKey);
     }
   }
   if (apiKey && apiKey instanceof Secret) {
