@@ -18,9 +18,10 @@ jobs:
         working-directory: example
         env:
           SHUTTLE_API_KEY: ${{ secrets.SHUTTLE_API_KEY }}
+          SHUTTLE_VERSION: v0.46.0
       - name: Run Dagger Pipelines
         run: dagger run deno run -A ../src/dagger/runner.ts
         working-directory: example
         env:
           SHUTTLE_API_KEY: ${{ secrets.SHUTTLE_API_KEY }}
-          SHUTTLE_VERSION: v0.39.0
+          SHUTTLE_VERSION: v0.46.0
