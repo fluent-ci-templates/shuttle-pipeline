@@ -1,12 +1,13 @@
 # Shuttle Pipeline
 
-[![fluentci pipeline](https://img.shields.io/badge/dynamic/json?label=pkg.fluentci.io&labelColor=%23000&color=%23460cf1&url=https%3A%2F%2Fapi.fluentci.io%2Fv1%2Fpipeline%2Fshuttle_pipeline&query=%24.version)](https://pkg.fluentci.io/shuttle_pipeline)
+[![fluentci pipeline](https://shield.fluentci.io/x/shuttle_pipeline)](https://pkg.fluentci.io/shuttle_pipeline)
 [![deno module](https://shield.deno.dev/x/shuttle_pipeline)](https://deno.land/x/shuttle_pipeline)
-![deno compatibility](https://shield.deno.dev/deno/^1.37)
+![deno compatibility](https://shield.deno.dev/deno/^1.41)
+[![dagger-min-version](https://shield.fluentci.io/dagger/v0.11.7)](https://dagger.io)
 [![](https://jsr.io/badges/@fluentci/shuttle)](https://jsr.io/@fluentci/shuttle)
 [![](https://img.shields.io/codecov/c/gh/fluent-ci-templates/shuttle-pipeline)](https://codecov.io/gh/fluent-ci-templates/shuttle-pipeline)
 
-A ready-to-use CI/CD Pipeline for deploying your Rust applications to [Shuttle](https://shuttle.rs/).
+A ready-to-use CI/CD Pipeline for deploying your shuttle applications to [Shuttle](https://shuttle.rs/).
 
 ## 🚀 Usage
 
@@ -41,7 +42,7 @@ dagger call deploy --src . --api-key SHUTTLE_API_KEY
 
 | Job     | Description                                 |
 |---------|---------------------------------------------|
-| deploy  | Deploy your Rust application to shuttle.rs. |
+| deploy  | Deploy your shuttle application to shuttle.rs. |
 
 ```typescript
  deploy(
